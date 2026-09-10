@@ -59,12 +59,12 @@ final class RoomTypesPage implements Hookable
     {
         \add_menu_page(
             'SC Room Bookings',
-            'Room Bookings',
+            'SC Room Bookings',
             'manage_options',
             self::PAGE_SLUG,
             [$this, 'renderPage'],
             'dashicons-admin-multisite',
-            27
+            91
         );
 
         /*
@@ -165,7 +165,7 @@ final class RoomTypesPage implements Hookable
                 <p class="description">
                     For sites only using this plugin to list rooms with basic info, not to take bookings. Trims each
                     room's edit screen down to just Capacity and Suitable for, and hides the Bookings, Documentation
-                    and Amenities menu items below. Nothing already saved — pricing, availability, amenities — is
+                    and Facilities menu items below. Nothing already saved — pricing, availability, facilities — is
                     touched, so turning this off again brings it all straight back.
                 </p>
 

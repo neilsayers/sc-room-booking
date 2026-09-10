@@ -26,7 +26,13 @@ final class MetaField
     }
 
     /**
-     * @param string[] $value
+     * Handles both a flat list (e.g. available_days) and a repeater's
+     * array-of-rows (e.g. price_options, layout_variants) — WordPress
+     * serializes either shape into postmeta the same way, so one
+     * method covers both rather than needing a separate helper per
+     * shape.
+     *
+     * @param array<int|string, mixed> $value
      */
     public static function saveArray(int $postId, string $key, array $value): void
     {

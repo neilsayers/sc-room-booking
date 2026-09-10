@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.3.0
+Stable tag: 0.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,11 +26,13 @@ after typing the type's plural label to confirm — doing so moves every one of 
 recovery window, nothing is hard-deleted) and cancels any bookings made against them (bookings themselves are never
 deleted, only marked Cancelled — see "Data model" below).
 
-Each room gets a hand-written "Room Details" box: capacity, what it's suitable for, price, which days of
-the week it's available, its daily opening/closing time, a minimum booking length, and a buffer required between
-bookings. Amenities are a proper taxonomy (Taxonomies\AmenityTaxonomy) rather than free text per room — manage the
-shared list once from Room Bookings -> Amenities (WordPress's own term-manager screen, nothing custom-built), then
-just tick which apply on each room.
+Each room gets a hand-written "Room Details" box: capacity, what it's suitable for, accessibility notes, one or more
+alternate layout options (each with its own capacity and photo — e.g. a hall that's 300 cleared, 220 theatre-style,
+150 cabaret), one or more price options (a default price plus, optionally, further tiers like "Off-peak
+non-commercial"/"Peak commercial"), which days of the week it's available, its daily opening/closing time, a minimum
+booking length, and a buffer required between bookings. Facilities are a proper taxonomy (Taxonomies\FacilityTaxonomy)
+rather than free text per room — manage the shared list once from Room Bookings -> Facilities (WordPress's own
+term-manager screen, nothing custom-built), then just tick which apply on each room.
 
 A booking always has a room, a start/end date-time, and a requester's name/email (phone and a free-text message are
 optional). Availability checking (Booking\AvailabilityChecker) weighs up the room's own opening days/hours, its
@@ -49,8 +51,9 @@ source directly — see Room Bookings -> Documentation in wp-admin for the full 
 
 Some sites only want the room listing — not bookings at all. Ticking "Use SC Room Bookings in simple mode" on the
 main Room Bookings screen trims each room's edit screen down to just Capacity and Suitable for, and hides the
-Bookings, Documentation and Amenities menu items. Everything else (pricing, availability, amenities, the booking
-system itself) stays exactly as it was, untouched, ready to reappear the moment the box is unticked again.
+Bookings, Documentation and Facilities menu items. Everything else (accessibility, layout options, pricing,
+availability, facilities, the booking system itself) stays exactly as it was, untouched, ready to reappear the
+moment the box is unticked again.
 
 == Data model ==
 
@@ -60,6 +63,45 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.4.2 =
+* featured_image_url (scrb_get_rooms()/REST) now requests WordPress's 'large' image size instead of 'medium' — it's
+  used by full-width slideshow/card displays in more than one theme template now, and 'medium' (300px max) was
+  visibly soft stretched that wide.
+
+= 0.4.1 =
+* Added a "Gallery images" field to the Room Details box — up to 10 extra photos an admin can attach to a room on
+  top of its Featured Image, picked via the same media modal Layout options already uses (multi-select this time).
+  Exposed as the new `gallery_image_urls` array via scrb_get_rooms()/REST, for a theme to build a slideshow or
+  gallery from — doesn't include the Featured Image itself, which a consumer is expected to show first.
+
+= 0.4.0 =
+* Capacity can now have one or more "layout options" alongside the plain Capacity figure — each with its own
+  seating/configuration style (Clear, Theatre-style, Cabaret, Classroom, Boardroom, U-shape, Banquet, Standing
+  reception — Support\LayoutTypes), its own capacity number, and an optional photo. A room that only ever needs one
+  number can leave this alone entirely; scrb_get_rooms()/REST expose it as the new `layout_variants` array.
+* Price restructured again: what was a single amount+unit+"contact for pricing" is now up to 6 price options per
+  room, each with its own optional label (e.g. "Off-peak non-commercial", "Peak commercial") — added and removed in
+  the browser via the room-edit screen's new "Add price option" button. The first row is always a room's plain
+  default price. Exposed as the new `price_options` array (replacing the old flat `price_amount`/`price_unit`/
+  `contact_for_pricing` keys) via scrb_get_rooms() and the REST rooms endpoint — a breaking change to that data
+  contract, acceptable for now as this plugin isn't yet in use on more than one site. Rooms priced before this
+  version have their old single price read as that first row automatically (Support\RoomMeta::priceOptions()), so
+  nothing already entered is lost, only left for an admin to re-save into the new shape.
+* Added an Accessibility field (free text) to the Room Details box.
+* The Amenities taxonomy is renamed Facilities — a better fit for venue-hire spaces like a hall or conference room.
+  Every existing term and every room's existing selections carry over automatically on upgrade (Setup\Upgrader
+  renames the taxonomy at the DB level rather than starting a new one) — nothing needs re-ticking. `amenities` is
+  renamed `facilities` in scrb_get_rooms()/REST output for the same reason the price fields changed shape above.
+* Added Room Bookings -> Reorder rooms: a drag-and-drop list (one per configured room type) that saves automatically
+  on drop. Stored in each room's own menu_order — no new postmeta — and scrb_get_rooms()/REST order by it first,
+  falling back to the previous oldest-first-by-date order for any room never dragged, so a site that never opens
+  this screen sees no change at all.
+
+= 0.3.1 =
+* The "SC Room Bookings" settings menu now reads "SC Room Bookings" in the admin sidebar (not just the page title)
+  and has moved down near the bottom of the menu, alongside SC Events Manager and SC Maps's own settings screens —
+  keeps the admin sidebar's top area for actual content rather than plugin settings.
 
 = 0.3.0 =
 * Added "Simple mode" (Room Bookings -> Room Types): a checkbox for sites that only want SC Room Bookings to list

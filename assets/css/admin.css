@@ -28,6 +28,148 @@
     max-width: 500px;
 }
 
+.scrb-repeater-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid #dcdcde;
+}
+
+.scrb-repeater-row:first-child {
+    padding-top: 0;
+}
+
+.scrb-repeater-row:last-child {
+    border-bottom: none;
+}
+
+/* The first row is always this room's default value, not an optional
+   extra — see room-details-repeaters.js's "always leave one row"
+   guard — so it never gets a remove button, however many rows are
+   added or removed around it. */
+.scrb-repeater-row:first-child .scrb-remove-row {
+    display: none;
+}
+
+.scrb-remove-row {
+    color: #b32d2e;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.scrb-remove-row:hover {
+    color: #dc3232;
+}
+
+.scrb-image-preview img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid #dcdcde;
+}
+
+.scrb-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.scrb-gallery-item {
+    position: relative;
+    display: block;
+}
+
+.scrb-gallery-item img {
+    display: block;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #dcdcde;
+}
+
+.scrb-remove-gallery-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 50%;
+    color: #b32d2e;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.scrb-remove-gallery-image:hover {
+    color: #dc3232;
+}
+
+.scrb-order-list {
+    max-width: 480px;
+    margin: 0 0 32px;
+    padding: 0;
+    list-style: none;
+}
+
+.scrb-order-list--saving {
+    opacity: 0.6;
+}
+
+.scrb-order-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    margin-bottom: -1px;
+}
+
+.scrb-order-handle {
+    cursor: grab;
+    color: #8c8f94;
+}
+
+.scrb-order-thumb {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.scrb-order-title {
+    flex: 1;
+}
+
+.scrb-order-status {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #8c8f94;
+}
+
+.scrb-order-status--muted {
+    font-style: italic;
+}
+
+.scrb-order-placeholder {
+    background: #f0f6fc;
+    border: 1px dashed #8c8f94;
+    visibility: visible !important;
+}
+
 .scrb-docs-code {
     max-width: 900px;
     padding: 12px 16px;

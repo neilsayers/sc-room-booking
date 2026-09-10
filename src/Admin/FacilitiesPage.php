@@ -4,19 +4,19 @@ namespace SCRoomBookings\Admin;
 
 use SCRoomBookings\Contracts\Hookable;
 use SCRoomBookings\Settings\Settings;
-use SCRoomBookings\Taxonomies\AmenityTaxonomy;
+use SCRoomBookings\Taxonomies\FacilityTaxonomy;
 
 /**
- * "Amenities" under Room Bookings — not a page this class renders
+ * "Facilities" under Room Bookings — not a page this class renders
  * itself, just a menu entry pointing straight at WordPress's own
- * term-manager screen for Taxonomies\AmenityTaxonomy (add/edit/
+ * term-manager screen for Taxonomies\FacilityTaxonomy (add/edit/
  * delete/merge already built in, no custom CRUD needed here).
- * AmenityTaxonomy registers with show_in_menu => false specifically
+ * FacilityTaxonomy registers with show_in_menu => false specifically
  * so this is the one place it's reachable from, rather than a
- * confusing second "Amenities" item nested under every configured
+ * confusing second "Facilities" item nested under every configured
  * room type's own menu.
  */
-final class AmenitiesPage implements Hookable
+final class FacilitiesPage implements Hookable
 {
     public function __construct(private Settings $settings)
     {
@@ -45,10 +45,10 @@ final class AmenitiesPage implements Hookable
 
         \add_submenu_page(
             'scrb-settings',
-            'Amenities',
-            'Amenities',
+            'Facilities',
+            'Facilities',
             'manage_categories',
-            'edit-tags.php?taxonomy='.AmenityTaxonomy::TAXONOMY.'&post_type='.\reset($roomPostTypes)
+            'edit-tags.php?taxonomy='.FacilityTaxonomy::TAXONOMY.'&post_type='.\reset($roomPostTypes)
         );
     }
 }

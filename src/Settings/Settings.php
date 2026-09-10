@@ -44,8 +44,8 @@ final class Settings
         // When true, the plugin is being used purely as a way to list
         // rooms (custom post types) with basic info — not to take
         // bookings. Trims the room-edit screen down to capacity/
-        // suitable-for and hides the Bookings/Documentation/Amenities
-        // admin menu items. Existing price/availability/amenities data
+        // suitable-for and hides the Bookings/Documentation/Facilities
+        // admin menu items. Existing price/availability/facilities data
         // is left untouched either way — see MetaBoxes\
         // RoomDetailsMetaBox::saveMetaBox() — so turning this off
         // again later doesn't lose anything.
