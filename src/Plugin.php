@@ -8,6 +8,10 @@ use SCRoomBookings\Admin\FacilitiesPage;
 use SCRoomBookings\Admin\RoomOrderPage;
 use SCRoomBookings\Admin\RoomTypesPage;
 use SCRoomBookings\Frontend\BookingsRestController;
+use SCRoomBookings\Frontend\DefaultTemplates;
+use SCRoomBookings\Frontend\FrontendAssets;
+use SCRoomBookings\Frontend\RoomDetailShortcode;
+use SCRoomBookings\Frontend\RoomListingShortcode;
 use SCRoomBookings\MetaBoxes\RoomDetailsMetaBox;
 use SCRoomBookings\Notifications\BookingNotifications;
 use SCRoomBookings\PostTypes\BookingPostType;
@@ -54,6 +58,10 @@ final class Plugin
             new FacilityTaxonomy($this->settings),
             new RoomDetailsMetaBox($this->settings),
             new BookingNotifications($this->settings),
+            new RoomListingShortcode($this->settings),
+            new RoomDetailShortcode(),
+            new DefaultTemplates($this->settings),
+            new FrontendAssets(),
         ];
 
         foreach ($features as $feature) {

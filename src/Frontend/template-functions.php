@@ -35,6 +35,25 @@ if (! function_exists('scrb_get_rooms')) {
     }
 }
 
+if (! function_exists('scrb_get_room')) {
+    /**
+     * One room, shaped exactly like a scrb_get_rooms() row — a
+     * theme's single-{post_type} template's equivalent of
+     * scrb_get_rooms(), so it doesn't have to filter the full list
+     * down to "this one" itself. Defaults to the post currently being
+     * displayed (get_the_ID()), same as calling it with no argument
+     * inside the loop.
+     *
+     * @return array<string, mixed> Empty if $postId isn't a published room of a configured type.
+     */
+    function scrb_get_room(?int $postId = null): array
+    {
+        $postId ??= (int) \get_the_ID();
+
+        return RoomListing::find($postId) ?? [];
+    }
+}
+
 if (! function_exists('scrb_check_availability')) {
     /**
      * @return true|string True if the slot is free, or a human-readable reason it isn't.

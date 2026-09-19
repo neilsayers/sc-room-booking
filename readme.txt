@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.4.2
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,12 @@ Every room and every availability/booking action is available three ways — pla
 (`scrb_check_availability()`, `scrb_request_booking()`), a public/versioned REST API (`scrb/v1`), or by reading the
 source directly — see Room Bookings -> Documentation in wp-admin for the full reference, including every hook.
 
+Out of the box — no theme customisation needed — every room type gets its own listing page (`[sc_rooms]`, or its own
+`/{slug}/` archive URL) and single-room page (`[sc_room id="123"]`, or the room's own permalink), so a site that's
+never touched a template file still has something worth looking at the moment it activates this plugin. A theme that
+wants its own look just adds a `single-{post_type}.php`/`archive-{post_type}.php` (or, on a Sage/Acorn theme, its own
+Blade partial) and this plugin's own version steps aside automatically — see Frontend\DefaultTemplates.
+
 Some sites only want the room listing — not bookings at all. Ticking "Use SC Room Bookings in simple mode" on the
 main Room Bookings screen trims each room's edit screen down to just Capacity and Suitable for, and hides the
 Bookings, Documentation and Facilities menu items. Everything else (accessibility, layout options, pricing,
@@ -63,6 +69,21 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.5.0 =
+* Added front-end shortcodes: `[sc_rooms]` (a grid of every configured room type, narrow with `type="room"` or a
+  comma list, limit with `limit="6"`) and `[sc_room id="123"]` (one room's full detail — image, price table,
+  facilities, accessibility). Both also callable directly from a theme template via
+  `Frontend\RoomListingShortcode::render()`/`RoomDetailShortcode`.
+* Added `scrb_get_room(?int $postId = null)` alongside the existing `scrb_get_rooms()` — one room, shaped the same
+  way, defaulting to the current post. Backed by the new `Frontend\RoomListing::find()`.
+* Added `Frontend\DefaultTemplates`: a single-room/archive-room view served automatically the moment this plugin's
+  activated on a site whose theme hasn't customised that room type's template yet, via the plain CSS in
+  `assets/css/frontend.css`. Steps aside the instant a theme adds its own `single-{post_type}.php`/
+  `archive-{post_type}.php`, and never engages at all on a Sage/Acorn theme (which always owns its whole template
+  hierarchy itself) — see that class's own docblock for the reasoning.
+* `RoomListing::query()`'s `type` argument (and so `[sc_rooms]`'s own `type` attribute) now accepts a comma-separated
+  list of room type keys, not just one.
 
 = 0.4.2 =
 * featured_image_url (scrb_get_rooms()/REST) now requests WordPress's 'large' image size instead of 'medium' — it's
