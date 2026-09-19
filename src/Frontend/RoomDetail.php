@@ -48,6 +48,14 @@ final class RoomDetail
                 </p>
             <?php endif; ?>
 
+            <?php if (($room['booking_url'] ?? '') !== '') : ?>
+                <p class="scrb-detail-cta">
+                    <a href="<?php echo \esc_url($room['booking_url']); ?>" target="_blank" rel="noopener">
+                        <?php echo \esc_html__('Book now', 'sc-room-bookings'); ?>
+                    </a>
+                </p>
+            <?php endif; ?>
+
             <?php if ($room['featured_image_url'] !== '') : ?>
                 <div class="scrb-detail-image">
                     <img src="<?php echo \esc_url($room['featured_image_url']); ?>" alt="">

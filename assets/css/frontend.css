@@ -60,6 +60,25 @@
     font-weight: 600;
 }
 
+.scrb-detail-cta {
+    margin: 0 0 16px;
+}
+
+.scrb-detail-cta a {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #2271b1;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.scrb-detail-cta a:hover {
+    background: #135e96;
+    color: #fff;
+}
+
 .scrb-detail-image img {
     width: 100%;
     max-height: 420px;

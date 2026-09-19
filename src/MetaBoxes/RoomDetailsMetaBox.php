@@ -123,6 +123,15 @@ final class RoomDetailsMetaBox implements Hookable
                             <input type="text" id="scrb_suitable_for" name="scrb[suitable_for]" class="regular-text" placeholder="e.g. Events and shows, Receptions and fairs, Boardroom style" value="<?php echo \esc_attr($meta['suitable_for']); ?>">
                         </td>
                     </tr>
+                    <?php if ($this->settings->bookingIsExternalLink()) : ?>
+                    <tr>
+                        <th scope="row"><label for="scrb_booking_url">Booking link</label></th>
+                        <td>
+                            <input type="url" id="scrb_booking_url" name="scrb[booking_url]" class="large-text" placeholder="https://" value="<?php echo \esc_attr($meta['booking_url']); ?>">
+                            <p class="description">Where this room's "Book now" sends visitors, opened in a new tab. Left blank, no "Book now" shows for this room.</p>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
                     <?php if (! $simpleMode) : ?>
                     <tr>
                         <th scope="row"><label for="scrb_accessibility">Accessibility</label></th>
@@ -240,13 +249,25 @@ final class RoomDetailsMetaBox implements Hookable
         MetaField::saveText($postId, '_scrb_capacity', (string) \absint($data['capacity'] ?? 0));
         MetaField::saveText($postId, '_scrb_suitable_for', (string) ($data['suitable_for'] ?? ''));
 
+        // Saved regardless of simple mode/booking mode, same reasoning
+        // as capacity/suitable_for above — booking_url only appears in
+        // $data when Settings::bookingIsExternalLink() had the field on
+        // the page (see renderMetaBox()), so this is a no-op otherwise
+        // (absent key -> '' -> MetaField::saveValue() deletes the row,
+        // which is only ever a real change if a link was set before the
+        // setting was switched back off).
+        if (isset($data['booking_url'])) {
+            MetaField::saveValue($postId, '_scrb_booking_url', \esc_url_raw((string) $data['booking_url']));
+        }
+
         // Simple mode's form (see renderMetaBox()) only has the two
-        // fields above — accessibility/layout/price/availability
-        // inputs don't exist on the page at all, so nothing for them
-        // shows up in $data either. Skipping them here (rather than
-        // saving whatever absent-key defaults would fall back to) is
-        // what stops a save while simple mode is on from silently
-        // wiping out real data underneath.
+        // fields above (plus booking_url, saved unconditionally above)
+        // — accessibility/layout/price/availability inputs don't exist
+        // on the page at all, so nothing for them shows up in $data
+        // either. Skipping them here (rather than saving whatever
+        // absent-key defaults would fall back to) is what stops a save
+        // while simple mode is on from silently wiping out real data
+        // underneath.
         if ($this->settings->simpleMode()) {
             return;
         }

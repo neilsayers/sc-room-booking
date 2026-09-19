@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.5.0
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,17 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.6.0 =
+* Added a "Booking" section to the main Room Bookings settings screen: "No online booking link" (the previous,
+  only behaviour) or "Send visitors to a third-party website to book". The second option adds a "Booking link"
+  field to every room's edit screen (Room Bookings -> Room Types), and RoomDetail/`[sc_room]`/DefaultTemplates'
+  bundled single-room.php all show a "Book now" button opening it in a new tab whenever a room has one set — a
+  room without a link set just shows no "Book now" at all. Exposed as the new `booking_url` field via
+  scrb_get_rooms()/scrb_get_room()/REST, so a theme can build its own "Book now" against it too (e.g.
+  civic-centre-uckfield's own content-single-room.blade.php/room-accordion.blade.php). This is deliberately just
+  a link-out, not a payment integration — see Settings::bookingMode()'s own docblock for why a future gateway
+  (e.g. via SC Commerce) would be a new mode here, not a rename of this one.
 
 = 0.5.0 =
 * Added front-end shortcodes: `[sc_rooms]` (a grid of every configured room type, narrow with `type="room"` or a

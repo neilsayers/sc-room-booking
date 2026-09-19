@@ -50,7 +50,20 @@ final class Settings
         // RoomDetailsMetaBox::saveMetaBox() — so turning this off
         // again later doesn't lose anything.
         'simple_mode' => false,
+        // 'internal' (the default — this plugin doesn't draw its own
+        // booking form, so nothing site-wide changes) or
+        // 'external_link', which lets each room set its own booking_url
+        // (MetaBoxes\RoomDetailsMetaBox) for the front end to send
+        // visitors to instead. A future gateway (e.g. an SC Commerce
+        // integration) would be a further value here, not a rename of
+        // this one — see BOOKING_MODES.
+        'booking_mode' => 'internal',
     ];
+
+    public const BOOKING_MODE_INTERNAL = 'internal';
+    public const BOOKING_MODE_EXTERNAL_LINK = 'external_link';
+
+    private const BOOKING_MODES = [self::BOOKING_MODE_INTERNAL, self::BOOKING_MODE_EXTERNAL_LINK];
 
     private array $values;
 
@@ -253,6 +266,34 @@ final class Settings
     public function setSimpleMode(bool $simpleMode): void
     {
         $this->values['simple_mode'] = $simpleMode;
+
+        \update_option(self::OPTION_KEY, $this->values);
+    }
+
+    public function bookingMode(): string
+    {
+        $mode = $this->values['booking_mode'];
+
+        return \in_array($mode, self::BOOKING_MODES, true) ? $mode : self::BOOKING_MODE_INTERNAL;
+    }
+
+    /**
+     * Whether each room can be given its own external booking_url
+     * (MetaBoxes\RoomDetailsMetaBox) for the front end to send visitors
+     * to instead of anything this plugin draws itself. Only gates
+     * whether that admin field is shown — a room that already has a
+     * booking_url saved keeps working on the front end even if this is
+     * later switched back off, same "nothing already saved is lost"
+     * rule simpleMode() follows.
+     */
+    public function bookingIsExternalLink(): bool
+    {
+        return $this->bookingMode() === self::BOOKING_MODE_EXTERNAL_LINK;
+    }
+
+    public function setBookingMode(string $mode): void
+    {
+        $this->values['booking_mode'] = \in_array($mode, self::BOOKING_MODES, true) ? $mode : self::BOOKING_MODE_INTERNAL;
 
         \update_option(self::OPTION_KEY, $this->values);
     }

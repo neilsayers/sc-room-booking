@@ -20,6 +20,7 @@ final class RoomTypesPage implements Hookable
     private const RELABEL_ACTION = 'scrb_relabel_room_types';
     private const DELETE_ACTION = 'scrb_delete_room_type';
     private const SIMPLE_MODE_ACTION = 'scrb_toggle_simple_mode';
+    private const BOOKING_MODE_ACTION = 'scrb_set_booking_mode';
 
     /**
      * Post statuses counted as "existing" for the pre-delete warning
@@ -42,6 +43,7 @@ final class RoomTypesPage implements Hookable
         \add_action('admin_post_'.self::RELABEL_ACTION, [$this, 'handleRelabel']);
         \add_action('admin_post_'.self::DELETE_ACTION, [$this, 'handleDelete']);
         \add_action('admin_post_'.self::SIMPLE_MODE_ACTION, [$this, 'handleToggleSimpleMode']);
+        \add_action('admin_post_'.self::BOOKING_MODE_ACTION, [$this, 'handleSetBookingMode']);
         \add_action('admin_notices', [$this, 'maybeShowCreatedNotice']);
     }
 
@@ -167,6 +169,32 @@ final class RoomTypesPage implements Hookable
                     room's edit screen down to just Capacity and Suitable for, and hides the Bookings, Documentation
                     and Facilities menu items below. Nothing already saved — pricing, availability, facilities — is
                     touched, so turning this off again brings it all straight back.
+                </p>
+
+                <?php \submit_button('Save'); ?>
+            </form>
+
+            <h2>Booking</h2>
+            <form method="post" action="<?php echo \esc_url(\admin_url('admin-post.php')); ?>">
+                <?php \wp_nonce_field(self::BOOKING_MODE_ACTION); ?>
+                <input type="hidden" name="action" value="<?php echo \esc_attr(self::BOOKING_MODE_ACTION); ?>">
+
+                <p>
+                    <label>
+                        <input type="radio" name="booking_mode" value="<?php echo \esc_attr(Settings::BOOKING_MODE_INTERNAL); ?>" <?php \checked($this->settings->bookingMode(), Settings::BOOKING_MODE_INTERNAL); ?>>
+                        No online booking link
+                    </label>
+                    <br>
+                    <label>
+                        <input type="radio" name="booking_mode" value="<?php echo \esc_attr(Settings::BOOKING_MODE_EXTERNAL_LINK); ?>" <?php \checked($this->settings->bookingMode(), Settings::BOOKING_MODE_EXTERNAL_LINK); ?>>
+                        Send visitors to a third-party website to book
+                    </label>
+                </p>
+                <p class="description">
+                    When the second option is selected, each room's edit screen gets a "Booking link" field — every
+                    "Book now" shown on the front end for that room opens it in a new tab instead. Leave a room's
+                    link blank and no "Book now" shows for it. (A built-in payment option, e.g. via SC Commerce, may
+                    be added here in future — this is the only online-booking option today.)
                 </p>
 
                 <?php \submit_button('Save'); ?>
@@ -587,6 +615,23 @@ final class RoomTypesPage implements Hookable
         \check_admin_referer(self::SIMPLE_MODE_ACTION);
 
         $this->settings->setSimpleMode(! empty($_POST['simple_mode']));
+
+        \add_settings_error('scrb_settings', 'scrb_saved', \__('Settings saved.', 'sc-room-bookings'), 'success');
+        \set_transient('settings_errors', \get_settings_errors(), 30);
+
+        \wp_safe_redirect(\admin_url('admin.php?page='.self::PAGE_SLUG.'&settings-updated=true'));
+        exit;
+    }
+
+    public function handleSetBookingMode(): void
+    {
+        if (! \current_user_can('manage_options')) {
+            \wp_die(\esc_html__('You are not allowed to do this.', 'sc-room-bookings'));
+        }
+
+        \check_admin_referer(self::BOOKING_MODE_ACTION);
+
+        $this->settings->setBookingMode(\sanitize_key(\wp_unslash($_POST['booking_mode'] ?? '')));
 
         \add_settings_error('scrb_settings', 'scrb_saved', \__('Settings saved.', 'sc-room-bookings'), 'success');
         \set_transient('settings_errors', \get_settings_errors(), 30);

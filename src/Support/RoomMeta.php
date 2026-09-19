@@ -38,6 +38,12 @@ final class RoomMeta
             'capacity' => (int) \get_post_meta($postId, '_scrb_capacity', true),
             'suitable_for' => (string) \get_post_meta($postId, '_scrb_suitable_for', true),
             'accessibility' => (string) \get_post_meta($postId, '_scrb_accessibility', true),
+            // Set regardless of Settings::bookingIsExternalLink() — a
+            // room that already has one keeps working on the front end
+            // even if the site-wide setting is later switched off, same
+            // "nothing already saved is lost" rule every other field
+            // here follows.
+            'booking_url' => (string) \get_post_meta($postId, '_scrb_booking_url', true),
             // All seven days by default — an admin who never touches
             // this screen still gets a room that's actually bookable,
             // rather than one that silently blocks every request.

@@ -99,6 +99,7 @@ final class RoomListing
             'capacity' => $meta['capacity'],
             'suitable_for' => $meta['suitable_for'],
             'accessibility' => $meta['accessibility'],
+            'booking_url' => $meta['booking_url'],
             'gallery_image_urls' => \array_values(\array_filter(\array_map(
                 static fn (int $id): string => \wp_get_attachment_image_url($id, 'large') ?: '',
                 RoomMeta::galleryImages($post->ID)
