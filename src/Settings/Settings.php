@@ -50,20 +50,30 @@ final class Settings
         // RoomDetailsMetaBox::saveMetaBox() — so turning this off
         // again later doesn't lose anything.
         'simple_mode' => false,
-        // 'internal' (the default — this plugin doesn't draw its own
-        // booking form, so nothing site-wide changes) or
+        // 'internal' (the default — no online booking of any kind,
+        // this plugin draws nothing on the front end), 'request' (a
+        // week-view calendar plus a request form — see
+        // Frontend\BookingWidget — that submits through
+        // scrb_request_booking() exactly like a direct API/REST caller
+        // would; every existing approve/decline/notify piece already
+        // works because of this, only the front-end UI is new), or
         // 'external_link', which lets each room set its own booking_url
         // (MetaBoxes\RoomDetailsMetaBox) for the front end to send
         // visitors to instead. A future gateway (e.g. an SC Commerce
         // integration) would be a further value here, not a rename of
-        // this one — see BOOKING_MODES.
+        // any of these — see BOOKING_MODES.
         'booking_mode' => 'internal',
     ];
 
     public const BOOKING_MODE_INTERNAL = 'internal';
+    public const BOOKING_MODE_REQUEST = 'request';
     public const BOOKING_MODE_EXTERNAL_LINK = 'external_link';
 
-    private const BOOKING_MODES = [self::BOOKING_MODE_INTERNAL, self::BOOKING_MODE_EXTERNAL_LINK];
+    private const BOOKING_MODES = [
+        self::BOOKING_MODE_INTERNAL,
+        self::BOOKING_MODE_REQUEST,
+        self::BOOKING_MODE_EXTERNAL_LINK,
+    ];
 
     private array $values;
 
@@ -289,6 +299,19 @@ final class Settings
     public function bookingIsExternalLink(): bool
     {
         return $this->bookingMode() === self::BOOKING_MODE_EXTERNAL_LINK;
+    }
+
+    /**
+     * Whether the front end should show the week-view "View
+     * availability" widget (Frontend\BookingWidget) that submits
+     * through scrb_request_booking() — applies to every configured
+     * room type uniformly, unlike bookingIsExternalLink()'s per-room
+     * booking_url, since this is the plugin's own booking engine
+     * rather than something that varies room to room.
+     */
+    public function bookingIsRequestForm(): bool
+    {
+        return $this->bookingMode() === self::BOOKING_MODE_REQUEST;
     }
 
     public function setBookingMode(string $mode): void

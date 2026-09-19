@@ -8,6 +8,7 @@ use SCRoomBookings\Admin\FacilitiesPage;
 use SCRoomBookings\Admin\RoomOrderPage;
 use SCRoomBookings\Admin\RoomTypesPage;
 use SCRoomBookings\Frontend\BookingsRestController;
+use SCRoomBookings\Frontend\BookingWidget;
 use SCRoomBookings\Frontend\DefaultTemplates;
 use SCRoomBookings\Frontend\FrontendAssets;
 use SCRoomBookings\Frontend\RoomDetailShortcode;
@@ -62,6 +63,7 @@ final class Plugin
             new RoomDetailShortcode(),
             new DefaultTemplates($this->settings),
             new FrontendAssets(),
+            new BookingWidget($this->settings),
         ];
 
         foreach ($features as $feature) {

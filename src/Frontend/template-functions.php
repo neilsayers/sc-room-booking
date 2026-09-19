@@ -10,6 +10,7 @@
 
 use SCRoomBookings\Booking\AvailabilityChecker;
 use SCRoomBookings\Booking\Booking;
+use SCRoomBookings\Frontend\BookingWidget;
 use SCRoomBookings\Frontend\RoomListing;
 use SCRoomBookings\PostTypes\BookingPostType;
 use SCRoomBookings\Settings\Settings;
@@ -51,6 +52,27 @@ if (! function_exists('scrb_get_room')) {
         $postId ??= (int) \get_the_ID();
 
         return RoomListing::find($postId) ?? [];
+    }
+}
+
+if (! function_exists('scrb_render_booking_widget')) {
+    /**
+     * The "View availability" button + week-view calendar + request
+     * form for one room (see Frontend\BookingWidget) — empty string
+     * unless Settings::bookingIsRequestForm() is on and $postId is a
+     * valid room, so a theme can call this unconditionally without its
+     * own guard. Defaults to the current post, same as scrb_get_room().
+     */
+    function scrb_render_booking_widget(?int $postId = null): string
+    {
+        $postId ??= (int) \get_the_ID();
+        $room = RoomListing::find($postId);
+
+        if ($room === null || ! (new Settings())->bookingIsRequestForm()) {
+            return '';
+        }
+
+        return BookingWidget::render($room);
     }
 }
 

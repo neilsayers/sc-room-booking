@@ -182,7 +182,12 @@ final class RoomTypesPage implements Hookable
                 <p>
                     <label>
                         <input type="radio" name="booking_mode" value="<?php echo \esc_attr(Settings::BOOKING_MODE_INTERNAL); ?>" <?php \checked($this->settings->bookingMode(), Settings::BOOKING_MODE_INTERNAL); ?>>
-                        No online booking link
+                        No online booking
+                    </label>
+                    <br>
+                    <label>
+                        <input type="radio" name="booking_mode" value="<?php echo \esc_attr(Settings::BOOKING_MODE_REQUEST); ?>" <?php \checked($this->settings->bookingMode(), Settings::BOOKING_MODE_REQUEST); ?>>
+                        Visitors can request a time and discuss by email
                     </label>
                     <br>
                     <label>
@@ -191,10 +196,15 @@ final class RoomTypesPage implements Hookable
                     </label>
                 </p>
                 <p class="description">
-                    When the second option is selected, each room's edit screen gets a "Booking link" field — every
-                    "Book now" shown on the front end for that room opens it in a new tab instead. Leave a room's
-                    link blank and no "Book now" shows for it. (A built-in payment option, e.g. via SC Commerce, may
-                    be added here in future — this is the only online-booking option today.)
+                    "Visitors can request a time" shows a "View availability" button on every room — a week view of
+                    what's free, tap a start time then an end time, then a name/email form. Submitting it creates a
+                    booking here exactly as if it came through the REST API, so nothing about approving/declining it
+                    (Room Bookings -> Bookings) or its email notifications changes — this only adds the front-end
+                    widget that was missing before.<br>
+                    "Send visitors to a third party" adds a "Booking link" field to each room's edit screen instead —
+                    every "Book now" shown on the front end for that room opens it in a new tab. Leave a room's link
+                    blank and no "Book now" shows for it. (A built-in payment option, e.g. via SC Commerce, may be
+                    added here in future.)
                 </p>
 
                 <?php \submit_button('Save'); ?>

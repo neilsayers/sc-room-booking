@@ -2,6 +2,8 @@
 
 namespace SCRoomBookings\Frontend;
 
+use SCRoomBookings\Settings\Settings;
+
 /**
  * Renders one room's full detail — image, description, price table,
  * facilities, accessibility notes. Shared by the [sc_room] shortcode
@@ -54,6 +56,10 @@ final class RoomDetail
                         <?php echo \esc_html__('Book now', 'sc-room-bookings'); ?>
                     </a>
                 </p>
+            <?php elseif ((new Settings())->bookingIsRequestForm()) : ?>
+                <div class="scrb-detail-cta">
+                    <?php echo BookingWidget::render($room); ?>
+                </div>
             <?php endif; ?>
 
             <?php if ($room['featured_image_url'] !== '') : ?>

@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.6.0
+Stable tag: 0.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,11 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.7.0 =
+* Added a third Booking option (Room Bookings -> Room Types): "Visitors can request a time and discuss by email". Every room gets a "View availability" button showing a week view (FullCalendar, vendored at assets/vendor/fullcalendar the same way SC Events Manager vendors Leaflet) — tap a start time, then an end time (deliberately not press-and-drag, which fights page scroll on a phone), fill in name/email (phone and a message are optional), submit. That request goes through scrb_request_booking() exactly as if it came through the REST API directly, so every existing piece — availability checking, the admin/pending/confirmed/declined workflow (Room Bookings -> Bookings), both email notifications — needed zero changes; this only adds the front-end widget that was missing (see scrb_request_booking()'s own long-standing "No public-facing booking form/calendar UI yet" note, now out of date).
+* Added `GET /rooms/{id}/schedule` (scrb/v1) and `AvailabilityChecker::blockedRanges()`: a room's opening days/hours/minimum booking length/buffer plus every existing booking's already-buffered blocked range in a date window — what the new calendar widget needs to shade a week view, as opposed to `GET /availability`'s existing one-candidate-slot-at-a-time check.
+* Added `Frontend\BookingWidget` and the `scrb_render_booking_widget(?int $postId = null)` template tag — same "plugin draws a sensible default, theme can call the same building block directly" split as scrb_get_room()/RoomDetail.
 
 = 0.6.0 =
 * Added a "Booking" section to the main Room Bookings settings screen: "No online booking link" (the previous,

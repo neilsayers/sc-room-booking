@@ -160,3 +160,155 @@
 .scrb-archive-title {
     margin-bottom: 24px;
 }
+
+/* ---- Booking widget (Frontend\BookingWidget / assets/js/booking-widget.js) ---- */
+
+.scrb-booking-widget-trigger {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.scrb-booking-widget-trigger:hover {
+    background: #135e96;
+}
+
+.scrb-booking-widget-dialog {
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    overflow: auto;
+    color: #1e1e1e;
+}
+
+.scrb-booking-widget-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.scrb-booking-widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    background: #fff;
+}
+
+.scrb-booking-widget-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.scrb-booking-widget-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.scrb-booking-widget-body {
+    padding: 20px;
+}
+
+.scrb-booking-widget-hint {
+    margin: 0 0 12px;
+    font-weight: 600;
+}
+
+.scrb-booking-widget-calendar {
+    font-size: 13px;
+}
+
+.scrb-booking-widget-form p {
+    margin: 0 0 12px;
+}
+
+.scrb-booking-widget-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.scrb-booking-widget-form input,
+.scrb-booking-widget-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+.scrb-booking-widget-selection {
+    font-weight: 600;
+    padding: 10px;
+    background: #f0f6fc;
+    border-radius: 4px;
+}
+
+.scrb-booking-widget-error {
+    color: #b32d2e;
+    font-weight: 600;
+}
+
+.scrb-booking-widget-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.scrb-booking-widget-change-times {
+    background: none;
+    border: none;
+    color: #2271b1;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font: inherit;
+}
+
+.scrb-booking-widget-submit {
+    padding: 10px 20px;
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font: inherit;
+}
+
+.scrb-booking-widget-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.scrb-booking-widget-success {
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Selected-range/blocked-range shading on the calendar itself — !important
+   overrides FullCalendar's own inline background-event colouring. */
+.scrb-slot-selected {
+    background: #2271b1 !important;
+    opacity: 0.85;
+}
+
+.scrb-slot-blocked {
+    background: repeating-linear-gradient(45deg, #eee, #eee 6px, #e2e2e2 6px, #e2e2e2 12px) !important;
+}

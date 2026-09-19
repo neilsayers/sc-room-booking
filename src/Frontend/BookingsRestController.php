@@ -2,6 +2,7 @@
 
 namespace SCRoomBookings\Frontend;
 
+use SCRoomBookings\Booking\AvailabilityChecker;
 use SCRoomBookings\Contracts\Hookable;
 use SCRoomBookings\Settings\Settings;
 use SCRoomBookings\Support\RoomMeta;
@@ -13,10 +14,15 @@ use SCRoomBookings\Support\RoomMeta;
  * endpoint documents one: existing fields won't be renamed or
  * removed within it; a breaking change gets its own v2 route instead.
  *
- * Three routes, all under scrb/v1:
- *   GET  /rooms         — every room, across every configured type
- *   GET  /availability   — is one room free for a given start/end?
- *   POST /bookings       — submit a booking request
+ * Four routes, all under scrb/v1:
+ *   GET  /rooms                  — every room, across every configured type
+ *   GET  /availability            — is one room free for a given start/end?
+ *   GET  /rooms/{id}/schedule     — a room's opening hours/rules plus every
+ *                                   blocked range in a date window, for
+ *                                   rendering a calendar (assets/js/
+ *                                   booking-widget.js) rather than probing
+ *                                   one candidate slot at a time
+ *   POST /bookings                — submit a booking request
  *
  * Deliberately open (no auth) on all three — same trust model as a
  * plain HTML contact form. GET routes only return what a room's own
@@ -66,6 +72,17 @@ final class BookingsRestController implements Hookable
             ],
         ]);
 
+        \register_rest_route(self::NAMESPACE, '/rooms/(?P<room_id>\d+)/schedule', [
+            'methods' => \WP_REST_Server::READABLE,
+            'callback' => [$this, 'handleSchedule'],
+            'permission_callback' => '__return_true',
+            'args' => [
+                'room_id' => ['type' => 'integer', 'required' => true, 'sanitize_callback' => 'absint'],
+                'start' => ['type' => 'string', 'required' => true, 'description' => 'ISO 8601 / strtotime-parsable.'],
+                'end' => ['type' => 'string', 'required' => true, 'description' => 'ISO 8601 / strtotime-parsable.'],
+            ],
+        ]);
+
         \register_rest_route(self::NAMESPACE, '/bookings', [
             'methods' => \WP_REST_Server::CREATABLE,
             'callback' => [$this, 'handleCreateBooking'],
@@ -100,6 +117,47 @@ final class BookingsRestController implements Hookable
         return new \WP_REST_Response([
             'available' => $result === true,
             'reason' => $result === true ? null : $result,
+        ]);
+    }
+
+    /**
+     * A room's own booking rules (opening days/hours, minimum booking
+     * length, buffer) plus every existing booking's already-buffered
+     * blocked range that overlaps [start, end] — everything assets/js/
+     * booking-widget.js needs to shade out a week view without
+     * probing scrb_check_availability() one candidate slot at a time.
+     */
+    public function handleSchedule(\WP_REST_Request $request): \WP_REST_Response|\WP_Error
+    {
+        $roomId = (int) $request->get_param('room_id');
+
+        try {
+            $start = new \DateTimeImmutable((string) $request->get_param('start'));
+            $end = new \DateTimeImmutable((string) $request->get_param('end'));
+        } catch (\Exception) {
+            return new \WP_Error(
+                'scrb_invalid_request',
+                \__('That date/time couldn\'t be understood.', 'sc-room-bookings'),
+                ['status' => 422]
+            );
+        }
+
+        $meta = RoomMeta::read($roomId);
+        $blocked = \array_map(
+            static fn (array $range): array => [
+                'start' => $range['start']->format(\DATE_ATOM),
+                'end' => $range['end']->format(\DATE_ATOM),
+            ],
+            (new AvailabilityChecker($this->settings))->blockedRanges($roomId, $start, $end)
+        );
+
+        return new \WP_REST_Response([
+            'available_days' => $meta['available_days'],
+            'available_start_time' => $meta['available_start_time'],
+            'available_end_time' => $meta['available_end_time'],
+            'min_booking_minutes' => $meta['min_booking_minutes'],
+            'buffer_minutes' => $meta['buffer_minutes'],
+            'blocked' => $blocked,
         ]);
     }
 

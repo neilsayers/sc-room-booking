@@ -108,6 +108,38 @@ final class AvailabilityChecker
     }
 
     /**
+     * Every existing pending/confirmed booking for this room that
+     * overlaps [$rangeStart, $rangeEnd], each already buffered by the
+     * room's own buffer_minutes on both sides — the same buffered
+     * window checkAvailability() itself compares a candidate slot
+     * against, so a calendar rendering these ranges as "blocked" and
+     * checkAvailability() rejecting a slot inside one always agree.
+     * Used by Frontend\RoomScheduleRestController for the front-end
+     * booking widget's week view — checkAvailability() only ever
+     * answers yes/no for one candidate slot, this is its "show me
+     * everything blocked in this window" counterpart.
+     *
+     * @return array<int, array{start: \DateTimeImmutable, end: \DateTimeImmutable}>
+     */
+    public function blockedRanges(int $roomId, \DateTimeImmutable $rangeStart, \DateTimeImmutable $rangeEnd): array
+    {
+        $room = RoomMeta::read($roomId);
+        $buffer = new \DateInterval(\sprintf('PT%dM', $room['buffer_minutes']));
+        $ranges = [];
+
+        foreach ($this->blockingBookingsForRoom($roomId, null) as $existing) {
+            $start = (new \DateTimeImmutable($existing['start_datetime']))->sub($buffer);
+            $end = (new \DateTimeImmutable($existing['end_datetime']))->add($buffer);
+
+            if ($start < $rangeEnd && $end > $rangeStart) {
+                $ranges[] = ['start' => $start, 'end' => $end];
+            }
+        }
+
+        return $ranges;
+    }
+
+    /**
      * @return array<int, array<string, mixed>>
      */
     private function blockingBookingsForRoom(int $roomId, ?int $excludeBookingId): array
