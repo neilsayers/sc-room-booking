@@ -40,6 +40,8 @@
         var calendar = null;
         var minBookingMinutes = 30; // RoomMeta's own default, until the schedule fetch says otherwise.
         var selection = { start: null, end: null };
+        var prefersReducedMotion = window.matchMedia
+            && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         trigger.addEventListener('click', function () {
             if (!calendar) {
@@ -47,12 +49,12 @@
                 calendar.render();
             }
 
-            dialog.showModal();
+            openDialog();
         });
 
         if (closeButton) {
             closeButton.addEventListener('click', function () {
-                dialog.close();
+                requestClose();
             });
         }
 
@@ -62,14 +64,79 @@
         // counts as the backdrop's hit target for a <dialog>).
         dialog.addEventListener('click', function (event) {
             if (event.target === dialog) {
-                dialog.close();
+                requestClose();
             }
+        });
+
+        // Escape fires 'cancel' before WordPress's own <dialog> closes
+        // itself instantly — prevented here so the same fade-out runs
+        // regardless of how the dialog gets closed, not just the close/
+        // backdrop/done paths above.
+        dialog.addEventListener('cancel', function (event) {
+            event.preventDefault();
+            requestClose();
         });
 
         if (doneButton) {
             doneButton.addEventListener('click', function () {
-                dialog.close();
+                requestClose();
             });
+        }
+
+        function openDialog() {
+            dialog.showModal();
+
+            if (prefersReducedMotion) {
+                dialog.classList.add('is-open');
+
+                return;
+            }
+
+            // Two rAFs, not one — the class needs to land in a frame
+            // *after* the dialog's own display:none -> block flip has
+            // actually painted, or the browser coalesces both changes
+            // into one frame and the opacity/transform transition never
+            // runs at all (the standard fix for animating an element
+            // that was just made visible).
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    dialog.classList.add('is-open');
+                });
+            });
+        }
+
+        function requestClose() {
+            if (prefersReducedMotion || !dialog.classList.contains('is-open')) {
+                dialog.close();
+
+                return;
+            }
+
+            dialog.classList.remove('is-open');
+
+            var closed = false;
+            var finish = function () {
+                if (closed) {
+                    return;
+                }
+
+                closed = true;
+                dialog.close();
+            };
+
+            dialog.addEventListener('transitionend', function handler(event) {
+                if (event.target === dialog && event.propertyName === 'opacity') {
+                    dialog.removeEventListener('transitionend', handler);
+                    finish();
+                }
+            });
+
+            // Fallback in case transitionend never fires for some reason
+            // (a stalled paint, a browser quirk) — same "fetch() always
+            // has a .catch()" belt-and-braces approach used elsewhere in
+            // this file, just for a CSS transition instead of a network
+            // call.
+            setTimeout(finish, 250);
         }
 
         if (changeTimesButton) {
@@ -235,6 +302,17 @@
                 id: 'scrb-selection',
                 start: start,
                 end: end,
+                // display: 'background' is the fix, not decoration — a
+                // normal (foreground) event reserves its own clickable
+                // area and sits on top of the grid, which silently
+                // swallowed any second tap landing on or near the first
+                // tap's provisional 30-minute marker. That made picking
+                // an end time anywhere close to the start look broken —
+                // only a tap safely clear of the marker's rendered box
+                // ever reached dateClick(). A background event never
+                // intercepts pointer events, the same reason blocked
+                // ranges (applySchedule(), above) are background too.
+                display: 'background',
                 classNames: ['scrb-slot-selected'],
             });
         }
@@ -288,6 +366,20 @@
 
             if (form) {
                 form.hidden = true;
+            }
+
+            if (calendar) {
+                // FullCalendar measures its container's own pixel
+                // dimensions to lay out day columns and to map a click's
+                // screen position back to a date/time — it has no way to
+                // know calendarEl.hidden just flipped, so left alone it
+                // keeps whatever (stale, often zero-width) measurement
+                // it last took while hidden. Without this, "Change
+                // times" renders every day column collapsed on top of
+                // each other, and dateClick() silently resolves clicks
+                // to the wrong cell (or nothing) until the window is
+                // resized by something else.
+                calendar.updateSize();
             }
 
             setStep('pick-start');

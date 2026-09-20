@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.7.0
+Stable tag: 0.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,23 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.7.1 =
+* Fixed the request-a-time widget's dialog not being centred on screen — a Tailwind-based theme's global margin
+  reset was silently breaking the `<dialog>` element's own default centring, restored with an explicit `margin:
+  auto`.
+* Fixed a real booking-blocking bug: after "Change times" (or completing one selection), the calendar's day columns
+  rendered collapsed on top of each other, and picking a second start/end time afterwards would silently fail —
+  visible to users as "I can't seem to book more than 30 minutes". Root cause was the same in both cases: hiding
+  the calendar's container element and showing it again leaves FullCalendar's own internal size measurement stale,
+  since it has no way to know the container's visibility changed. Fixed by calling `calendar.updateSize()`
+  immediately after un-hiding it.
+* The provisional "you tapped a start time" marker no longer intercepts clicks near it (rendered as a background
+  event, like blocked ranges already were, instead of a normal foreground one) — a smaller contributing cause of
+  the same "can't pick an end time near the start" symptom above.
+* Added a fade-in/out transition to the dialog and its backdrop (respects prefers-reduced-motion), and restyled
+  "Change times" as a bordered secondary button with a back arrow, and the calendar's prev/next/today buttons with
+  slightly more rounded corners — all pure CSS/JS polish, no behaviour change.
 
 = 0.7.0 =
 * Added a third Booking option (Room Bookings -> Room Types): "Visitors can request a time and discuss by email". Every room gets a "View availability" button showing a week view (FullCalendar, vendored at assets/vendor/fullcalendar the same way SC Events Manager vendors Leaflet) — tap a start time, then an end time (deliberately not press-and-drag, which fights page scroll on a phone), fill in name/email (phone and a message are optional), submit. That request goes through scrb_request_booking() exactly as if it came through the REST API directly, so every existing piece — availability checking, the admin/pending/confirmed/declined workflow (Room Bookings -> Bookings), both email notifications — needed zero changes; this only adds the front-end widget that was missing (see scrb_request_booking()'s own long-standing "No public-facing booking form/calendar UI yet" note, now out of date).

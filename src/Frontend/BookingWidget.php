@@ -115,7 +115,7 @@ final class BookingWidget implements Hookable
                         <p class="scrb-booking-widget-error" role="alert" hidden></p>
 
                         <p class="scrb-booking-widget-actions">
-                            <button type="button" class="scrb-booking-widget-change-times"><?php echo \esc_html__('Change times', 'sc-room-bookings'); ?></button>
+                            <button type="button" class="scrb-booking-widget-change-times">&larr; <?php echo \esc_html__('Change times', 'sc-room-bookings'); ?></button>
                             <button type="submit" class="scrb-booking-widget-submit"><?php echo \esc_html__('Request this time', 'sc-room-bookings'); ?></button>
                         </p>
                     </form>
