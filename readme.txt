@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.7.2
+Stable tag: 0.7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,11 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.7.3 =
+* The dialog's "Book {Room}" title is now a real `<h2>` (was a styled `<p>`), with `aria-labelledby` wired up on
+  the `<dialog>` itself — gives assistive tech a proper heading/landmark for the dialog's purpose. Purely markup;
+  the CSS already fully controlled its look, so nothing changes visually.
 
 = 0.7.2 =
 * Added a small "You have selected..." label above the chosen date/time in the request form, so it reads as an

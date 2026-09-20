@@ -70,11 +70,11 @@ final class BookingWidget implements Hookable
                 <?php echo \esc_html__('View availability', 'sc-room-bookings'); ?>
             </button>
 
-            <dialog class="scrb-booking-widget-dialog">
+            <dialog class="scrb-booking-widget-dialog" aria-labelledby="scrb-booking-widget-title-<?php echo \esc_attr((string) $room['id']); ?>">
                 <div class="scrb-booking-widget-header">
-                    <p class="scrb-booking-widget-title">
+                    <h2 class="scrb-booking-widget-title" id="scrb-booking-widget-title-<?php echo \esc_attr((string) $room['id']); ?>">
                         <?php echo \esc_html(\sprintf(\__('Book %s', 'sc-room-bookings'), $room['name'])); ?>
-                    </p>
+                    </h2>
                     <button type="button" class="scrb-booking-widget-close" aria-label="<?php echo \esc_attr__('Close', 'sc-room-bookings'); ?>">&times;</button>
                 </div>
 
