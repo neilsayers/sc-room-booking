@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.7.1
+Stable tag: 0.7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,10 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.7.2 =
+* Added a small "You have selected..." label above the chosen date/time in the request form, so it reads as an
+  answer to a question rather than just a fact dropped on the page.
 
 = 0.7.1 =
 * Fixed the request-a-time widget's dialog not being centred on screen — a Tailwind-based theme's global margin

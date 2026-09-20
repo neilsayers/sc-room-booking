@@ -283,6 +283,15 @@
     font: inherit;
 }
 
+.scrb-booking-widget-selection-label {
+    margin: 0 0 4px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
 .scrb-booking-widget-selection {
     font-weight: 600;
     padding: 10px;

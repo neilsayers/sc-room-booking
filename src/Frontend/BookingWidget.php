@@ -85,6 +85,7 @@ final class BookingWidget implements Hookable
                     <div class="scrb-booking-widget-calendar"></div>
 
                     <form class="scrb-booking-widget-form" hidden>
+                        <p class="scrb-booking-widget-selection-label"><?php echo \esc_html__('You have selected...', 'sc-room-bookings'); ?></p>
                         <p class="scrb-booking-widget-selection"></p>
 
                         <p>
