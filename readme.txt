@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.7.3
+Stable tag: 0.7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,14 @@ never touched a template file still has something worth looking at the moment it
 wants its own look just adds a `single-{post_type}.php`/`archive-{post_type}.php` (or, on a Sage/Acorn theme, its own
 Blade partial) and this plugin's own version steps aside automatically — see Frontend\DefaultTemplates.
 
+How a visitor actually books is a site-wide choice (Room Bookings -> Room Types -> Booking): no online booking at
+all (the default — a plain room directory, nothing more), a full request-a-time widget
+(`Frontend\BookingWidget`/`scrb_render_booking_widget()`) — a week-view calendar (FullCalendar, vendored, nothing
+else to install) where a visitor taps a start time then an end time, fills in their name and email, and submits
+straight through `scrb_request_booking()` above — or a link out to a third-party booking site instead (a
+`booking_url` field appears on each room's edit screen once this option's picked, and every "Book now" opens it in
+a new tab). Switching between them never touches anything already saved.
+
 Some sites only want the room listing — not bookings at all. Ticking "Use SC Room Bookings in simple mode" on the
 main Room Bookings screen trims each room's edit screen down to just Capacity and Suitable for, and hides the
 Bookings, Documentation and Facilities menu items. Everything else (accessibility, layout options, pricing,
@@ -69,6 +77,17 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.7.4 =
+* Documentation catch-up — the "Description" section above and Room Bookings -> Documentation in wp-admin had both
+  fallen behind: neither mentioned the request-a-time booking widget at all, and the admin page was still only
+  listing the original 3 REST routes/2 PHP functions from before shortcodes, `DefaultTemplates`, `booking_url`, or
+  the widget existed. Both now cover all of it: the three booking modes, `scrb_get_room()`, the shortcodes,
+  `scrb_render_booking_widget()`, and `GET /rooms/{id}/schedule`. No code changes.
+* Verified `Frontend\DefaultTemplates` end-to-end for the first time on a genuinely vanilla WordPress install (no
+  Sage/Acorn, no theme template overrides) rather than only on a site where the Sage guard always steps aside —
+  single-room.php, archive-room.php, `[sc_rooms]`, and the booking widget all confirmed working correctly there
+  too.
 
 = 0.7.3 =
 * The dialog's "Book {Room}" title is now a real `<h2>` (was a styled `<p>`), with `aria-labelledby` wired up on
