@@ -23,6 +23,39 @@
     margin-top: 6px;
 }
 
+.scrb-shortcode-modal {
+    width: 100%;
+    max-width: 420px;
+    padding: 0;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.scrb-shortcode-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.scrb-shortcode-modal form {
+    padding: 20px 24px;
+}
+
+.scrb-shortcode-modal h2 {
+    margin-top: 0;
+}
+
+.scrb-shortcode-modal select {
+    width: 100%;
+    max-width: 320px;
+}
+
+.scrb-shortcode-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px !important;
+}
+
 .scrb-room-details textarea {
     width: 100%;
     max-width: 500px;

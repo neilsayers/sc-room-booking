@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.7.5
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,13 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.8.0 =
+* Added a "SC Room Bookings" classic-editor (TinyMCE) toolbar button: "Show all rooms" or "Show one room by ID"
+  (a dropdown of every configured room), then "Insert Shortcode" drops `[sc_rooms]`/`[sc_room id="X"]` in at the
+  caret — no more hand-typing either shortcode or looking up a room's post ID. Registered on the same
+  `mce_external_plugins`/`mce_buttons` filters WordPress itself uses, so it also appears inside a "Classic" block's
+  own mini toolbar in the block editor, not just a true classic-editor screen (`Admin\ShortcodeButton`).
 
 = 0.7.5 =
 * Fixed the request-a-time widget doing nothing when `[sc_room]` was dropped onto an ordinary page rather than
