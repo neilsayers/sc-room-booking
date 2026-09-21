@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.2
+Stable tag: 0.9.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,14 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.4 =
+* Restructured Room Bookings -> Documentation into two clear parts: a friendlier, less technical "Getting started"
+  covering everyday set-up (creating a room type, adding rooms/facilities, reordering, the three booking modes,
+  Simple mode, and using shortcodes/blocks) for non-technical site owners, followed by a "Technical detail" section
+  (template overrides, PHP functions, REST API, hooks) for developers. Also removed every Sage/Acorn-specific
+  reference from the documentation text — the plugin's own template-override behaviour already works the same on
+  any theme, so the docs shouldn't call out one theme framework by name.
 
 = 0.9.3 =
 * Fixed both Gutenberg blocks still rendering full width inside the block editor itself (0.9.2 only fixed the
