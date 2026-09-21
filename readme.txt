@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.4
+Stable tag: 0.9.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ the classic editor's toolbar opens a small dialog ("show all rooms" or "show one
 the right shortcode at the caret, and the block editor gets the same two options as proper Gutenberg blocks (Room
 Listing, Room Detail) with a live preview while editing.
 
-How a visitor actually books is a site-wide choice (Room Bookings -> Room Types -> Booking): no online booking at
+How a visitor actually books is a site-wide choice (Room Bookings -> Basic settings -> Booking): no online booking at
 all (the default — a plain room directory, nothing more), a full request-a-time widget
 (`Frontend\BookingWidget`/`scrb_render_booking_widget()`) — a week-view calendar (FullCalendar, vendored, nothing
 else to install) where a visitor taps a start time then an end time, fills in their name and email, and submits
@@ -82,6 +82,11 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.5 =
+* Renamed the "Room Types" admin menu item to "Basic settings" (Documentation's own references to it updated to
+  match) and made the Simple mode/Booking mode forms' submit buttons say "Save changes" instead of a bare "Save",
+  matching the room-type relabelling form's button just below them on the same screen.
 
 = 0.9.4 =
 * Restructured Room Bookings -> Documentation into two clear parts: a friendlier, less technical "Getting started"

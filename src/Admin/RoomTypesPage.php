@@ -78,7 +78,7 @@ final class RoomTypesPage implements Hookable
         \add_submenu_page(
             self::PAGE_SLUG,
             'SC Room Bookings',
-            'Room Types',
+            'Basic settings',
             'manage_options',
             self::PAGE_SLUG,
             [$this, 'renderPage']
@@ -171,7 +171,7 @@ final class RoomTypesPage implements Hookable
                     touched, so turning this off again brings it all straight back.
                 </p>
 
-                <?php \submit_button('Save'); ?>
+                <?php \submit_button('Save changes'); ?>
             </form>
 
             <h2>Booking</h2>
@@ -207,7 +207,7 @@ final class RoomTypesPage implements Hookable
                     added here in future.)
                 </p>
 
-                <?php \submit_button('Save'); ?>
+                <?php \submit_button('Save changes'); ?>
             </form>
 
             <?php if ($roomTypes !== []) : ?>

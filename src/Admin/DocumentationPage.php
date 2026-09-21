@@ -100,8 +100,8 @@ final class DocumentationPage implements Hookable
 
             <h3>How visitors book</h3>
             <p>
-                Under <strong>Room Bookings &rarr; Room Types</strong>, the Booking section controls what a visitor
-                can actually do:
+                Under <strong>Room Bookings &rarr; Basic settings</strong>, the Booking section controls what a
+                visitor can actually do:
             </p>
             <table class="widefat striped" style="max-width: 900px;">
                 <thead>
@@ -137,7 +137,7 @@ final class DocumentationPage implements Hookable
             <h3>Simple mode</h3>
             <p>
                 If you only want to showcase your rooms — with no booking at all, not even a link — turn on
-                <strong>Simple mode</strong> at the top of <strong>Room Bookings &rarr; Room Types</strong>. This
+                <strong>Simple mode</strong> at the top of <strong>Room Bookings &rarr; Basic settings</strong>. This
                 hides the Bookings, Documentation and Facilities menus, and trims each room's edit screen down to
                 just the basics. Nothing already saved (pricing, availability, facilities) is lost — turning it off
                 again brings it all straight back.
@@ -230,7 +230,7 @@ $booking = scrb_request_booking([
 
             <h3>Booking mode: implementation reference</h3>
             <p>
-                Set on Room Bookings &rarr; Room Types &rarr; Booking (see "How visitors book" above for the
+                Set on Room Bookings &rarr; Basic settings &rarr; Booking (see "How visitors book" above for the
                 friendlier version of this). The underlying classes and data for each of the three options:
             </p>
             <table class="widefat striped" style="max-width: 900px;">
