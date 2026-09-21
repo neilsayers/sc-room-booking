@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.7.4
+Stable tag: 0.7.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,12 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.7.5 =
+* Fixed the request-a-time widget doing nothing when `[sc_room]` was dropped onto an ordinary page rather than
+  viewed on a room's own URL — its JS/CSS were only ever enqueued for `is_singular($roomTypes)`, so a "View
+  availability" button rendered by the shortcode anywhere else had no behaviour behind it. Now also enqueues
+  whenever the current post's content contains the `[sc_room]` shortcode.
 
 = 0.7.4 =
 * Documentation catch-up — the "Description" section above and Room Bookings -> Documentation in wp-admin had both

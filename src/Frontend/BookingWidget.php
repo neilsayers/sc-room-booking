@@ -33,8 +33,14 @@ final class BookingWidget implements Hookable
     }
 
     /**
-     * Only on a page that could actually render this widget — same
-     * reasoning as Frontend\VenueMapAssets's own conditional enqueue.
+     * Only on a page that could actually render this widget: a room's
+     * own page, same reasoning as Frontend\VenueMapAssets's own
+     * conditional enqueue — or any post/page whose content embeds
+     * [sc_room], which is under no obligation to *be* a room (see
+     * RoomDetailShortcode, and civic-centre-uckfield's own
+     * "sample-page" hitting exactly this the first time someone
+     * dropped the shortcode onto an ordinary page and the button did
+     * nothing, since only the singular-room case was covered here).
      */
     public function maybeEnqueueAssets(): void
     {
@@ -44,7 +50,15 @@ final class BookingWidget implements Hookable
 
         $roomTypes = \array_keys($this->settings->allRoomTypes());
 
-        if ($roomTypes === [] || ! \is_singular($roomTypes)) {
+        if ($roomTypes === []) {
+            return;
+        }
+
+        $post = \get_post();
+        $hasShortcode = $post instanceof \WP_Post
+            && \has_shortcode($post->post_content, RoomDetailShortcode::SHORTCODE_TAG);
+
+        if (! \is_singular($roomTypes) && ! $hasShortcode) {
             return;
         }
 
