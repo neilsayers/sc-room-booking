@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.8.0
+Stable tag: 0.8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,18 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.8.1 =
+* The request-a-time widget's calendar no longer hides once both a start and end time are picked — it stays
+  visible (the shaded range on it is the confirmation), and the contact form appears underneath it instead of
+  replacing it, with a 1-second ease-in scroll bringing the form into view. Was a two-step "pick times, then the
+  calendar's replaced by the form" flow; this was purely a design choice, not a technical constraint, and is a
+  better match for how a visitor actually wants to see what they've picked against everything else on the
+  calendar (the previous design's own reasoning, that showing one thing at a time keeps a small phone screen
+  simple, turned out to matter less than being able to see the shaded range and the form together).
+* Fixed the dialog's title bar overlapping the calendar/form while scrolling — it was `position: sticky`, which
+  looked messy once the widget's content could scroll further than one screen. It now scrolls away normally with
+  everything else.
 
 = 0.8.0 =
 * Added a "SC Room Bookings" classic-editor (TinyMCE) toolbar button: "Show all rooms" or "Show one room by ID"

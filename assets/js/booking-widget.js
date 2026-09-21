@@ -332,10 +332,12 @@
                 selectionEl.textContent = formatRangeForDisplay(selection.start, selection.end);
             }
 
-            if (calendarEl) {
-                calendarEl.hidden = true;
-            }
-
+            // The calendar deliberately stays visible (not hidden) —
+            // the shaded range on it *is* the confirmation of what's
+            // been picked, with the form appearing underneath rather
+            // than replacing it. Scrolled into view below instead,
+            // since the two together usually don't fit in the dialog's
+            // own visible height at once.
             if (hintStart) {
                 hintStart.hidden = true;
             }
@@ -349,6 +351,28 @@
             }
 
             hideError();
+            scrollToForm();
+        }
+
+        function scrollToForm() {
+            if (!form) {
+                return;
+            }
+
+            var target = Math.max(0, form.offsetTop - 16);
+
+            if (prefersReducedMotion) {
+                dialog.scrollTop = target;
+
+                return;
+            }
+
+            // 1 second, ease-in (slow start, gathering speed) rather
+            // than a linear or browser-default smooth-scroll curve —
+            // asked for specifically so the jump from "tapped an end
+            // time" to "here's the form" reads as one continuous
+            // motion the visitor can follow, not a snap.
+            animateScrollTo(dialog, target, 1000);
         }
 
         function resetSelection() {
@@ -360,27 +384,14 @@
                 existing.remove();
             }
 
-            if (calendarEl) {
-                calendarEl.hidden = false;
-            }
-
             if (form) {
                 form.hidden = true;
             }
 
-            if (calendar) {
-                // FullCalendar measures its container's own pixel
-                // dimensions to lay out day columns and to map a click's
-                // screen position back to a date/time — it has no way to
-                // know calendarEl.hidden just flipped, so left alone it
-                // keeps whatever (stale, often zero-width) measurement
-                // it last took while hidden. Without this, "Change
-                // times" renders every day column collapsed on top of
-                // each other, and dateClick() silently resolves clicks
-                // to the wrong cell (or nothing) until the window is
-                // resized by something else.
-                calendar.updateSize();
-            }
+            // Instant, not animated — this is a reset, not a guided
+            // transition the visitor needs to be able to follow the
+            // way scrollToForm()'s own animation is.
+            dialog.scrollTop = 0;
 
             setStep('pick-start');
             hideError();
@@ -466,6 +477,41 @@
 
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
+    }
+
+    // Animates container.scrollTop to targetTop over duration ms using
+    // a cubic ease-in curve (progress^3) — starts slow and gathers
+    // speed, rather than the constant speed a plain requestAnimationFrame
+    // loop would give or the ease-in-out/unspecified curve a browser's
+    // own scrollIntoView({behavior: 'smooth'}) uses (and which isn't
+    // customisable anyway).
+    function animateScrollTo(container, targetTop, duration) {
+        var startTop = container.scrollTop;
+        var distance = targetTop - startTop;
+
+        if (distance === 0) {
+            return;
+        }
+
+        var startTime = null;
+
+        function step(timestamp) {
+            if (startTime === null) {
+                startTime = timestamp;
+            }
+
+            var elapsed = timestamp - startTime;
+            var progress = Math.min(elapsed / duration, 1);
+            var eased = progress * progress * progress;
+
+            container.scrollTop = startTop + distance * eased;
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+
+        requestAnimationFrame(step);
     }
 
     // Plain "HH:mm" arithmetic for slotMinTime/slotMaxTime padding —
