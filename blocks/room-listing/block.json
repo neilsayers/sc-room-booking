@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "sc-room-bookings/room-listing",
+    "title": "Room Listing",
+    "category": "sc-room-bookings",
+    "icon": "admin-multisite",
+    "description": "A grid of rooms, exactly like the [sc_rooms] shortcode.",
+    "textdomain": "sc-room-bookings",
+    "attributes": {
+        "roomType": { "type": "string", "default": "" },
+        "limit": { "type": "number", "default": 0 }
+    },
+    "supports": { "html": false },
+    "editorScript": "scrb-block-room-listing-editor",
+    "render": "file:./render.php"
+}

@@ -1,0 +1,16 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "sc-room-bookings/room-detail",
+    "title": "Room Detail",
+    "category": "sc-room-bookings",
+    "icon": "admin-multisite",
+    "description": "One room's full detail, exactly like the [sc_room] shortcode.",
+    "textdomain": "sc-room-bookings",
+    "attributes": {
+        "roomId": { "type": "number", "default": 0 }
+    },
+    "supports": { "html": false },
+    "editorScript": "scrb-block-room-detail-editor",
+    "render": "file:./render.php"
+}

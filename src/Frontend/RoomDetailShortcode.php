@@ -31,6 +31,23 @@ final class RoomDetailShortcode implements Hookable
     public function renderShortcode($atts): string
     {
         $atts = \shortcode_atts(self::DEFAULT_ATTS, (array) $atts, self::SHORTCODE_TAG);
+
+        return self::render($atts);
+    }
+
+    /**
+     * Callable directly from a theme template or a Gutenberg block's
+     * render.php, e.g.:
+     *   echo RoomDetailShortcode::render(['id' => $roomId]);
+     *
+     * Same "shortcode method delegates to a static render()" split as
+     * RoomListingShortcode.
+     *
+     * @param array<string, mixed> $atts
+     */
+    public static function render(array $atts): string
+    {
+        $atts += self::DEFAULT_ATTS;
         $postId = (int) $atts['id'] ?: (int) \get_the_ID();
 
         $room = RoomListing::find($postId, new Settings());

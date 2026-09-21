@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.8.1
+Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ never touched a template file still has something worth looking at the moment it
 wants its own look just adds a `single-{post_type}.php`/`archive-{post_type}.php` (or, on a Sage/Acorn theme, its own
 Blade partial) and this plugin's own version steps aside automatically — see Frontend\DefaultTemplates.
 
+Dropping either shortcode into a specific page doesn't need typing it by hand either: a "SC Room Bookings" button in
+the classic editor's toolbar opens a small dialog ("show all rooms" or "show one room" from a dropdown) and inserts
+the right shortcode at the caret, and the block editor gets the same two options as proper Gutenberg blocks (Room
+Listing, Room Detail) with a live preview while editing.
+
 How a visitor actually books is a site-wide choice (Room Bookings -> Room Types -> Booking): no online booking at
 all (the default — a plain room directory, nothing more), a full request-a-time widget
 (`Frontend\BookingWidget`/`scrb_render_booking_widget()`) — a week-view calendar (FullCalendar, vendored, nothing
@@ -77,6 +82,20 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.0 =
+* Added two Gutenberg blocks — "Room Listing" and "Room Detail" — the block-editor equivalent of `[sc_rooms]`/
+  `[sc_room]`. Both are dynamic (server-rendered) blocks whose `render.php` calls straight into
+  `RoomListingShortcode::render()`/`RoomDetailShortcode::render()`, the exact same rendering the shortcodes
+  themselves use, so a block and its shortcode twin can never drift apart. Room Detail's Inspector panel has a
+  dropdown of every configured room (same list `Admin\ShortcodeButton`'s TinyMCE modal uses); both blocks preview
+  live in the editor via `ServerSideRender`, so what you see while editing matches the front end exactly. No build
+  step: `block.json`'s `editorScript` points at a plain ES5 file registered with explicit `wp-*` script
+  dependencies, not a webpack-generated one, same "drop it in, nothing to compile" philosophy as the rest of this
+  plugin (`Blocks\Blocks`).
+* Added `RoomDetailShortcode::render()` (a static method alongside the existing `renderShortcode()`), matching
+  `RoomListingShortcode`'s own shape — needed by the Room Detail block, and now also directly callable from a
+  theme template the same way `RoomListingShortcode::render()` already was.
 
 = 0.8.1 =
 * The request-a-time widget's calendar no longer hides once both a start and end time are picked — it stays

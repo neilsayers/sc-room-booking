@@ -106,6 +106,14 @@ final class DocumentationPage implements Hookable
                 </tbody>
             </table>
             <p class="description">
+                Adding either shortcode to a specific page doesn't need typing it by hand: a "SC Room Bookings"
+                button in the classic editor's toolbar (<code>Admin\ShortcodeButton</code>) opens a small dialog to
+                build and insert one, and the block editor has the same two options as proper blocks (Room Listing,
+                Room Detail — <code>Blocks\Blocks</code>) with a live preview while editing. Both call the exact same
+                <code>RoomListingShortcode::render()</code>/<code>RoomDetailShortcode::render()</code> the shortcodes
+                themselves use, so a block, a shortcode, and this button's output can never drift apart.
+            </p>
+            <p class="description">
                 Want your own look instead? Add your theme's own <code>single-&#123;post_type&#125;.php</code>/
                 <code>archive-&#123;post_type&#125;.php</code> (or, on a Sage theme, a
                 <code>content-single-&#123;post_type&#125;.blade.php</code> partial) and build it against the PHP
