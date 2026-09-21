@@ -1,3 +1,15 @@
+/*
+ * Gutenberg block wrapper spacing (Blocks\Blocks' Room Listing/Room
+ * Detail blocks) — a theme's own stylesheet can override the gap by
+ * setting --scrb-block-spacing on :root/body to something else; 1rem
+ * is just this plugin's own sensible default.
+ */
+.wp-block-sc-room-bookings-room-listing,
+.wp-block-sc-room-bookings-room-detail {
+    margin-top: var(--scrb-block-spacing, 1rem);
+    margin-bottom: var(--scrb-block-spacing, 1rem);
+}
+
 /* ---- Listing grid ([sc_rooms], DefaultTemplates' archive-room.php) ---- */
 
 .scrb-listing {

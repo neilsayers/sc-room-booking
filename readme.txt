@@ -4,12 +4,15 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.5
+Stable tag: 0.9.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 A site-agnostic room/space booking manager. Guides you through naming your own bookable post types before anything
 is registered.
+
+Copyright (C) 2026 Screen Candy (screencandy.co.uk). Licensed under the GNU General Public License v2 or later — see
+the bundled LICENSE file, or https://www.gnu.org/licenses/gpl-2.0.html, for the full terms.
 
 == Description ==
 
@@ -82,6 +85,15 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.6 =
+* Added a proper GPLv2-or-later copyright notice (plugin header, readme, and a bundled LICENSE file) — this plugin
+  isn't distributed on WordPress.org, but it's still a derivative work of WordPress's own GPL-licensed core (it runs
+  entirely through WP's hooks/APIs), so the code itself has to stay GPL-compatible however it's sold.
+* Added self-hosted update checking (Setup\UpdateChecker, using the vendored, build-step-free `plugin-update-checker`
+  library) pointed at this plugin's own GitHub repo, so installs get the normal wp-admin "Update available" notice
+  without needing to be listed on WordPress.org. Releasing an update is just tagging the repo `vX.Y.Z` and pushing —
+  no separate zip to build, matching this plugin's existing no-build-step approach.
 
 = 0.9.5 =
 * Renamed the "Room Types" admin menu item to "Basic settings" (Documentation's own references to it updated to

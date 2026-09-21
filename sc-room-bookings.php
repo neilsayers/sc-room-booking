@@ -4,7 +4,7 @@
  * Plugin Name:       SC Room Bookings
  * Plugin URI:        https://screencandy.co.uk
  * Description:       A site-agnostic room/space booking manager. On first activation, guides you through naming your own bookable post type (e.g. "Room", "Court", "Desk") before anything is registered.
- * Version:           0.9.5
+ * Version:           0.9.6
  * Requires at least: 6.6
  * Requires PHP:      8.1
  * Author:            Neil Sayers
@@ -12,6 +12,17 @@
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       sc-room-bookings
+ *
+ * SC Room Bookings
+ * Copyright (C) 2026 Screen Candy (screencandy.co.uk)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version. See the LICENSE
+ * file bundled with this plugin, or https://www.gnu.org/licenses/,
+ * for the full text — including the "no warranty" terms this program
+ * is distributed under.
  */
 
 namespace SCRoomBookings;
@@ -20,7 +31,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('SCRB_VERSION', '0.9.5');
+define('SCRB_VERSION', '0.9.6');
 define('SCRB_FILE', __FILE__);
 define('SCRB_PATH', \plugin_dir_path(__FILE__));
 define('SCRB_URL', \plugin_dir_url(__FILE__));

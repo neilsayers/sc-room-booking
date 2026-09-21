@@ -21,6 +21,7 @@ use SCRoomBookings\PostTypes\BookingPostType;
 use SCRoomBookings\PostTypes\RoomPostTypes;
 use SCRoomBookings\Settings\Settings;
 use SCRoomBookings\Setup\Upgrader;
+use SCRoomBookings\Setup\UpdateChecker;
 use SCRoomBookings\Taxonomies\FacilityTaxonomy;
 
 /**
@@ -50,6 +51,7 @@ final class Plugin
     {
         $features = [
             new Upgrader(),
+            new UpdateChecker(),
             new RoomTypesPage($this->settings),
             new BookingsPage($this->settings),
             new FacilitiesPage($this->settings),
