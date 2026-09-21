@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.1
+Stable tag: 0.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,16 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.2 =
+* Fixed both Gutenberg blocks rendering full width instead of constrained to the theme's own content column like
+  every other block. A dynamic block's `save()` returns `null` (there's nothing in `post_content` to give it the
+  usual `wp-block-*` wrapper a static block's own saved markup would carry), so `render.php` is responsible for
+  adding that wrapper itself via `get_block_wrapper_attributes()` — which neither block's `render.php` was doing,
+  so there was no `wp-block-*` class anywhere on either block's output for a theme's own width-constraining CSS to
+  target. Verified with real measurements: a plain paragraph, the block's wrapper, and the block's own content
+  all now measure identically (960px on the testbed's theme) on both the published page and the editor's own
+  preview.
 
 = 0.9.1 =
 * Fixed the Gutenberg blocks' editor preview showing completely unstyled HTML — no card borders, plain blue links
