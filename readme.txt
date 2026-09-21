@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.0
+Stable tag: 0.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,6 +82,16 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.1 =
+* Fixed the Gutenberg blocks' editor preview showing completely unstyled HTML — no card borders, plain blue links
+  instead of styled titles, no pill badges — nothing like the real front end. `assets/css/frontend.css` was only
+  ever enqueued on `wp_enqueue_scripts`, which never fires in the block editor's own admin context, so
+  `ServerSideRender`'s live preview had no stylesheet to render against at all. Fixed by registering (not just
+  enqueueing) the style on `init`, early enough to exist in both contexts, and having both blocks' `block.json`
+  reference that same handle as their own `style` — the mechanism WordPress provides specifically for a block's
+  styles to load in the editor and the front end alike. A block's preview now matches the real front end exactly,
+  same as it already did after publishing (that part was always correct — this was an editor-only gap).
 
 = 0.9.0 =
 * Added two Gutenberg blocks — "Room Listing" and "Room Detail" — the block-editor equivalent of `[sc_rooms]`/
