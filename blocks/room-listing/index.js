@@ -6,6 +6,7 @@
     var __ = wp.i18n.__;
     var registerBlockType = wp.blocks.registerBlockType;
     var InspectorControls = wp.blockEditor.InspectorControls;
+    var useBlockProps = wp.blockEditor.useBlockProps;
     var PanelBody = wp.components.PanelBody;
     var TextControl = wp.components.TextControl;
 
@@ -21,6 +22,7 @@
         edit: function (props) {
             var attributes = props.attributes;
             var setAttributes = props.setAttributes;
+            var blockProps = useBlockProps();
 
             return el(
                 Fragment,
@@ -51,10 +53,14 @@
                         })
                     )
                 ),
-                el(ServerSideRender, {
-                    block: 'sc-room-bookings/room-listing',
-                    attributes: attributes,
-                })
+                el(
+                    'div',
+                    blockProps,
+                    el(ServerSideRender, {
+                        block: 'sc-room-bookings/room-listing',
+                        attributes: attributes,
+                    })
+                )
             );
         },
         save: function () {

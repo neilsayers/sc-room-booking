@@ -83,6 +83,18 @@ record of a request once it's been made, not disposable content.
 
 == Changelog ==
 
+= 0.9.3 =
+* Fixed both Gutenberg blocks still rendering full width inside the block editor itself (0.9.2 only fixed the
+  front end and the `ServerSideRender` preview's fetched HTML — the editor's own `BlockListBlock` wrapper element
+  is built client-side and needed its own fix). Two gaps, both now closed: neither block's `edit()` function
+  called `wp.blockEditor.useBlockProps()`, so the editor never recognised either block's root element as a proper
+  block wrapper (`[data-type="sc-room-bookings/room-listing"]` matched nothing at all); and separately, a theme
+  needs to declare `add_theme_support('editor-styles')` before WordPress adds `.editor-styles-wrapper` to the
+  editor's DOM in the first place — without it, Gutenberg's own default `.editor-styles-wrapper .wp-block {
+  max-width: 840px }` rule never applies to *any* block there, confirmed by measuring that even a plain
+  `core/paragraph` block was full width. The theme-support half is a testbed theme fix, not a plugin one, but is
+  called out here since it's a prerequisite for this plugin's blocks to size correctly in any theme's editor.
+
 = 0.9.2 =
 * Fixed both Gutenberg blocks rendering full width instead of constrained to the theme's own content column like
   every other block. A dynamic block's `save()` returns `null` (there's nothing in `post_content` to give it the

@@ -6,6 +6,7 @@
     var __ = wp.i18n.__;
     var registerBlockType = wp.blocks.registerBlockType;
     var InspectorControls = wp.blockEditor.InspectorControls;
+    var useBlockProps = wp.blockEditor.useBlockProps;
     var PanelBody = wp.components.PanelBody;
     var SelectControl = wp.components.SelectControl;
     var Placeholder = wp.components.Placeholder;
@@ -28,6 +29,7 @@
         edit: function (props) {
             var attributes = props.attributes;
             var setAttributes = props.setAttributes;
+            var blockProps = useBlockProps();
 
             var roomPicker = el(SelectControl, {
                 label: __('Room', 'sc-room-bookings'),
@@ -50,13 +52,17 @@
                     {},
                     controls,
                     el(
-                        Placeholder,
-                        {
-                            icon: 'admin-multisite',
-                            label: __('Room Detail', 'sc-room-bookings'),
-                            instructions: __('Pick which room this shows.', 'sc-room-bookings'),
-                        },
-                        roomPicker
+                        'div',
+                        blockProps,
+                        el(
+                            Placeholder,
+                            {
+                                icon: 'admin-multisite',
+                                label: __('Room Detail', 'sc-room-bookings'),
+                                instructions: __('Pick which room this shows.', 'sc-room-bookings'),
+                            },
+                            roomPicker
+                        )
                     )
                 );
             }
@@ -65,10 +71,14 @@
                 Fragment,
                 {},
                 controls,
-                el(ServerSideRender, {
-                    block: 'sc-room-bookings/room-detail',
-                    attributes: attributes,
-                })
+                el(
+                    'div',
+                    blockProps,
+                    el(ServerSideRender, {
+                        block: 'sc-room-bookings/room-detail',
+                        attributes: attributes,
+                    })
+                )
             );
         },
         save: function () {
