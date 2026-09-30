@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.7
+Stable tag: 0.9.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,13 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.8 =
+* Updates now install from the release's own built zip (correct folder name) rather than GitHub's source archive, and
+  a release is published automatically whenever the plugin header's Version changes — no manual tagging.
+
+= 0.9.7 =
+* Added a "Support & further development" panel to the settings screen, and a support contact line in this readme.
 
 = 0.9.6 =
 * Added a proper GPLv2-or-later copyright notice (plugin header, readme, and a bundled LICENSE file) — this plugin

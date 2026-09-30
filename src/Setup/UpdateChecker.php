@@ -14,10 +14,11 @@ use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
  * build-step-free) Plugin Update Checker library — see vendor/
  * plugin-update-checker/README.md for the library's own docs.
  *
- * Releasing an update is just tagging the repo `vX.Y.Z` and pushing —
- * no separate zip to build or upload, matching this plugin's existing
- * "no build step" approach: PUC downloads the tag's own source archive
- * directly, which is already a complete, ready-to-run copy.
+ * Releasing an update is just bumping the plugin header's Version and
+ * pushing: .github/workflows/release.yml tags vX.Y.Z and attaches a
+ * built sc-room-bookings.zip to the GitHub Release. enableReleaseAssets()
+ * makes sites install that zip, whose folder is named correctly, rather
+ * than GitHub's source archive.
  */
 final class UpdateChecker implements Hookable
 {
@@ -32,6 +33,8 @@ final class UpdateChecker implements Hookable
     {
         require_once SCRB_PATH.'vendor/plugin-update-checker/plugin-update-checker.php';
 
-        PucFactory::buildUpdateChecker(self::REPO_URL, SCRB_FILE, 'sc-room-bookings');
+        PucFactory::buildUpdateChecker(self::REPO_URL, SCRB_FILE, 'sc-room-bookings')
+            ->getVcsApi()
+            ->enableReleaseAssets();
     }
 }
