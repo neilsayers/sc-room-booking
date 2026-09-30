@@ -314,6 +314,26 @@ final class RoomTypesPage implements Hookable
                     )); ?>
                 </p>
             <?php endif; ?>
+
+            <h2>Support &amp; further development</h2>
+            <div class="card" style="max-width: 700px;">
+                <p>
+                    SC Room Bookings is free to use, and made with care by <strong>Neil</strong> at
+                    <a href="https://screencandy.co.uk" target="_blank" rel="noopener">Screen Candy</a> — a small,
+                    friendly studio building practical WordPress tools and websites that just work, with no
+                    fuss and no jargon.
+                </p>
+                <p>
+                    Stuck on something, got a question, or an idea to make it better? Neil would love to hear from
+                    you. And if you need something tailored to your own site — a new feature, a custom design, or a
+                    plugin built from scratch — he's available for further development work too.
+                </p>
+                <p>
+                    <a class="button button-primary" href="mailto:sc-room-bookings@screencandy.co.uk">
+                        sc-room-bookings@screencandy.co.uk
+                    </a>
+                </p>
+            </div>
         </div>
         <?php
     }

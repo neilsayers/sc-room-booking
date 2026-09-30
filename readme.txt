@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.6
+Stable tag: 0.9.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,8 @@ Copyright (C) 2026 Screen Candy (screencandy.co.uk). Licensed under the GNU Gene
 the bundled LICENSE file, or https://www.gnu.org/licenses/gpl-2.0.html, for the full terms.
 
 == Description ==
+
+Support, questions or further development work: sc-room-bookings@screencandy.co.uk — Neil at Screen Candy is happy to help.
 
 SC Room Bookings is built to be dropped into any WordPress site as-is — no build step, no Composer install. Rather
 than hard-coding a single "Room" post type, it's managed from one "Room Bookings" settings screen where you create
