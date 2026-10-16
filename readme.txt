@@ -4,7 +4,7 @@ Tags: bookings, rooms, availability, calendar
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 0.9.8
+Stable tag: 0.9.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,10 @@ Bookings instead), and never trashed by a room-type deletion, only marked Cancel
 record of a request once it's been made, not disposable content.
 
 == Changelog ==
+
+= 0.9.9 =
+* Add an uninstall script: deleting the plugin now removes its settings, version marker, transients and update-checker
+  state. Rooms, facilities and bookings are left in place, as they're the site's own records.
 
 = 0.9.8 =
 * Updates now install from the release's own built zip (correct folder name) rather than GitHub's source archive, and
